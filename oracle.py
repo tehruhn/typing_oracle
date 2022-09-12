@@ -1,5 +1,18 @@
 import random
-import msvcrt
+# import msvcrt
+import sys, tty, termios
+
+def getch(char_width=1):
+    '''get a fixed number of typed characters from the terminal. 
+    Linux / Mac only'''
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd)
+    try:
+        tty.setraw(fd)
+        ch = sys.stdin.read(char_width)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+    return ch
 
 """
 structure of maps is : 
@@ -31,7 +44,7 @@ while(True):
     # take input
     # curr = input("Enter f or d : ")
     print("Enter f or d : ")
-    curr = msvcrt.getch().decode('ASCII')
+    curr = getch()
 
     if curr == 'p' :
         break
@@ -39,7 +52,7 @@ while(True):
     while (curr != 'f' and curr != 'd'):
         # curr = input("please enter only f or d : ")
         print("Please enter only f or d : ")
-        curr = msvcrt.getch().decode('ASCII')
+        curr = getch()
         if curr == 'p' :
             break
 
